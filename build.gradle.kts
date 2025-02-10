@@ -2,3 +2,26 @@
 plugins {
     alias(libs.plugins.android.application) apply false
 }
+
+gradle
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+gradle
+buildscript {
+    extra.apply {
+        set("gradle_version", "8.1.2") // Versão mais recente do Gradle
+        set("kotlin_version", "1.8.0") // Se estiver usando Kotlin
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.2.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${project.extra["kotlin_version"]}")
+    }
+}
