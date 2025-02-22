@@ -8,11 +8,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +34,13 @@ public class MainActivity extends AppCompatActivity {
         Button btnAddTask = findViewById(R.id.add_task_button);
         Button btnTalkOrga = findViewById(R.id.chat_with_orga_button);
         progressBar = findViewById(R.id.daily_progress);
+        TextView txtInfoCurrentDate = findViewById(R.id.current_date);
 
+        // Coloca a data atual
+        Date currentDate = new Date();
+        SimpleDateFormat brazillianFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String currentDateFormatted = brazillianFormat.format(currentDate);
+        txtInfoCurrentDate.setText(String.format("Hoje: %s", currentDateFormatted));
 
         // Configuração inicial do ProgressBar
         progressBar.setProgress(00); // Exemplo: Progresso inicial em 50%
