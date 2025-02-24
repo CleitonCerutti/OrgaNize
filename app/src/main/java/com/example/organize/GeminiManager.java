@@ -17,7 +17,8 @@ public class GeminiManager {
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private final OkHttpClient client = new OkHttpClient();
 //
-//    public String sendMessage(String userMessage) {
+    public String sendMessage(String userMessage) {
+        return "Resposta da Orga";
 //        try {
 //            // Criar o corpo da requisição
 //            JSONObject jsonBody = new JSONObject();
@@ -63,5 +64,5 @@ public class GeminiManager {
 //            Log.e("GeminiManager", "Erro ao enviar mensagem: " + e.getMessage());
 //        }
 //        return "Erro ao processar a mensagem.";
-//    }
+    }
 }
