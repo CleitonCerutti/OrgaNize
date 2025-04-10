@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="task_priorities">
+        <item>Baixa</item>
+        <item>Média</item>
+        <item>Alta</item>
+        <item>Urgente</item>
+    </string-array>
+
+    <string-array name="task_statuses">
+        <item>Pendente</item>
+        <item>Em Progresso</item>
+        <item>Concluída</item>
+        <item>Cancelada</item>
+    </string-array>
+
+    <string-array name="task_categories">
+        <item>Trabalho</item>
+        <item>Estudo</item>
+        <item>Pessoal</item>
+        <item>Saúde</item>
+        <item>Lazer</item>
+        <item>Outros</item>
+    </string-array>
+</resources>

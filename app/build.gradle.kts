@@ -1,25 +1,32 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
 }
 
 android {
     namespace = "com.example.organize"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.organize"
-        minSdk = 34
-        targetSdk = 35
+        minSdk = 26
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val geminiApiKey = System.getenv("GEMINI_API_KEY") ?: ""
+        if (geminiApiKey.isEmpty()) {
+            logger.warn("AVISO: GEMINI_API_KEY não está configurada nas variáveis de ambiente!")
+        }
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
     }
+
     buildFeatures {
         buildConfig = true
+        viewBinding = true
     }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -27,71 +34,53 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-
-            // Carrega a chave de API do arquivo local.properties
-//            val localProperties = Properties().apply {
-//                load(project.rootProject.file("local.properties").inputStream())
-//            }
-//            val geminiApiKey = localProperties.getProperty("GEMINI_API_KEY", "")
-//            if (geminiApiKey.isNotEmpty()) {
-//                // Define a chave de API como um campo de build
-//                buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
-//            } else {
-//                throw GradleException("A chave de API 'GEMINI_API_KEY' não foi encontrada no arquivo local.properties")
-//            }
         }
-
-//        debug {
-            // Carrega a chave de API do arquivo local.properties
-//            val localProperties = Properties().apply {
-//                load(project.rootProject.file("local.properties").inputStream())
-//            }
-//            val geminiApiKey = localProperties.getProperty("GEMINI_API_KEY", "")
-//            if (geminiApiKey.isNotEmpty()) {
-//                // Define a chave de API como um campo de build
-//                buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
-//            } else {
-//                throw GradleException("A chave de API 'GEMINI_API_KEY' não foi encontrada no arquivo local.properties")
-//            }
-//        }
+        debug {
+            isMinifyEnabled = false
+        }
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    // Configuração correta do androidResources
+    androidResources {
+        additionalParameters += "--warn-manifest-validation"
+        ignoreAssetsPattern += "!.svn:!.git:!.ds_store:!*.scc:.*:<dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"
     }
 }
 
 dependencies {
+    // AndroidX Core
     implementation(libs.appcompat)
-    implementation(libs.material)
-    implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.common)
-    implementation(libs.support.annotations)
+    implementation(libs.activity)
 
+    // Material Design
+    implementation(libs.material)
+
+    // Testes
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    // Biblioteca do Google Gemini (API de linguagem generativa)
-//    implementation("com.google.ai.generativelanguage:generativelanguage:0.1.0")
+    // Networking
     implementation(libs.okhttp)
-    implementation(libs.logging.interceptor) // Para logging
-    implementation(libs.gson) // Para manipulação de JSON
-
-    // Retrofit (opcional, para requisições HTTP)
+    implementation(libs.logging.interceptor)
+    implementation(libs.gson)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
-    // Coroutines (opcional, se estiver usando Kotlin)
+    // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 
-    // ViewModel e LiveData (opcional, para MVVM)
+    // Architecture Components
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.lifecycle.livedata.ktx)
 
-    // Navigation (opcional, para navegação entre telas)
+    // Navigation
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
 }

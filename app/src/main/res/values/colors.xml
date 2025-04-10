@@ -2,4 +2,18 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Cores principais -->
+    <color name="primaryColor">#6200EE</color>
+    <color name="primaryDarkColor">#3700B3</color>
+    <color name="accentColor">#03DAC5</color>
+
+    <!-- Cores dinâmicas (opcional) -->
+    <color name="material_dynamic_primary50">#4CAF50</color>
+    <color name="material_dynamic_secondary30">#2196F3</color>
+    <color name="material_dynamic_tertiary50">#FFC107</color>
+    <color name="material_dynamic_error50">#F44336</color>
+    <color name="material_dynamic_primary40">#FF6200EE</color>
+    <color name="material_dynamic_secondary40">#FF64B5F6</color>
+    <color name="material_dynamic_tertiary40">#FFFF9800</color>
 </resources>
