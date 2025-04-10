@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/material_dynamic_secondary90"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="1dp">
 
     <!-- Orga Flutuando -->
 
@@ -15,46 +16,109 @@
     <!-- Lista de Tarefas -->
 
     <!-- Botões de Ação Rápida -->
+    <!-- Dentro do ConstraintLayout de activity_main.xml -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_imc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="@color/material_dynamic_secondary95"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/current_date">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Seu IMC"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_imc_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="--"
+                android:textColor="@color/material_dynamic_primary0"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_imc_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Carregando..."
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/progress_imc"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="12dp"
+                android:max="40"
+                android:progress="20"
+                android:progressDrawable="@drawable/progress_imc" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/welcome_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Olá, Usuário!"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/current_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/orga_image"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/orga_image"
-        android:layout_width="186dp"
-        android:layout_height="298dp"
+        android:layout_width="372dp"
+        android:layout_height="244dp"
         android:contentDescription="Orga flutuando"
         android:src="@drawable/orga"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.145" />
+        app:layout_constraintVertical_bias="0.147" />
 
     <TextView
         android:id="@+id/current_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="36dp"
         android:text="Hoje: 07/01/2025"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/action_buttons_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/orga_image" />
+        app:layout_constraintTop_toBottomOf="@id/orga_image"
+        app:layout_constraintVertical_bias="0.034" />
 
-    <ProgressBar
-        android:id="@+id/daily_progress"
-        style="@android:style/Widget.ProgressBar.Horizontal"
-        android:layout_width="0dp"
-        android:layout_height="8dp"
-        android:layout_marginTop="692dp"
-        android:progress="50"
-        android:progressDrawable="@drawable/progress_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Botão de Menu -->
 
@@ -70,7 +134,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/orga_image"
-        app:layout_constraintVertical_bias="0.772">
+        app:layout_constraintVertical_bias="0.869">
 
         <Button
             android:id="@+id/add_task_button"
@@ -82,22 +146,23 @@
             android:textColor="@color/white" />
 
         <Button
-            android:id="@+id/add_reminder_button"
+            android:id="@+id/add_habit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:backgroundTint="@color/material_dynamic_primary0"
+            android:text="+ Hábito"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/add_reminder_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginHorizontal="8dp"
             android:backgroundTint="@color/material_dynamic_primary0"
             android:text="+ Lembrete"
             android:textColor="@color/white" />
 
-        <Button
-            android:id="@+id/chat_with_orga_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:backgroundTint="@color/material_dynamic_primary0"
-            android:text="Chat"
-            android:textColor="@color/white" />
     </LinearLayout>
 
     <ImageButton
@@ -111,6 +176,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/chat_with_orga_button"
+        android:layout_width="171dp"
+        android:layout_height="53dp"
+        android:layout_marginHorizontal="8dp"
+        android:backgroundTint="@color/material_dynamic_primary0"
+        android:text="Chat"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/action_buttons_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_date"
+        app:layout_constraintVertical_bias="0.95" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

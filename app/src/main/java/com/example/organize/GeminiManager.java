@@ -1,68 +1,110 @@
 package com.example.organize;
 
 import android.util.Log;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.IOException;
-import okhttp3.MediaType;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public class GeminiManager {
-    private static final String API_KEY = "AIzaSyBwWrXTyRHkqT-I_LozGSKvGMhdAbBXUYo"; // Substitua pela sua chave
-    private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private final OkHttpClient client = new OkHttpClient();
-//
-    public String sendMessage(String userMessage) {
-        return "Resposta da Orga";
-//        try {
-//            // Criar o corpo da requisição
-//            JSONObject jsonBody = new JSONObject();
-//            JSONArray contentsArray = new JSONArray();
-//            JSONObject contentObject = new JSONObject();
-//            JSONArray partsArray = new JSONArray();
-//            JSONObject partObject = new JSONObject();
-//
-//            partObject.put("text", userMessage); // A mensagem do usuário
-//            partsArray.put(partObject);
-//            contentObject.put("parts", partsArray);
-//            contentsArray.put(contentObject);
-//            jsonBody.put("contents", contentsArray);
-//
-//            RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
-//
-//            // Criar a requisição
-//            Request request = new Request.Builder()
-//                    .url(API_URL + "?key=" + API_KEY) // Adiciona a chave de API como parâmetro
-//                    .post(body)
-//                    .addHeader("Content-Type", "application/json")
-//                    .build();
-//
-//            // Executar a requisição
-//            Response response = client.newCall(request).execute();
-//            if (response.isSuccessful() && response.body() != null) {
-//                String responseBody = response.body().string();
-//                JSONObject jsonResponse = new JSONObject(responseBody);
-//                JSONArray candidates = jsonResponse.getJSONArray("candidates");
-//                if (candidates.length() > 0) {
-//                    JSONObject candidate = candidates.getJSONObject(0);
-//                    JSONObject content = candidate.getJSONObject("content");
-//                    JSONArray parts = content.getJSONArray("parts");
-//                    if (parts.length() > 0) {
-//                        JSONObject part = parts.getJSONObject(0);
-//                        return part.optString("text", "Nenhuma resposta foi gerada.");
-//                    }
-//                }
-//            } else {
-//                Log.e("GeminiManager", "Erro na requisição: " + response.code());
-//            }
-//        } catch (IOException | JSONException e) {
-//            Log.e("GeminiManager", "Erro ao enviar mensagem: " + e.getMessage());
-//        }
-//        return "Erro ao processar a mensagem.";
+    private static final String TAG = "GeminiManager";
+    private static final String BASE_URL = "https://generativelanguage.googleapis.com/v1beta/";
+    private static final String API_KEY = BuildConfig.GEMINI_API_KEY;
+    private final GeminiApiService apiService;
+
+    public GeminiManager() {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+                .addInterceptor(chain -> {
+                    Request request = chain.request().newBuilder()
+                            .url(chain.request().url().newBuilder()
+                                    .addQueryParameter("key", API_KEY)
+                                    .build())
+                            .header("Content-Type", "application/json")
+                            .build();
+                    return chain.proceed(request);
+                })
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        apiService = retrofit.create(GeminiApiService.class);
+    }
+
+    public void sendMessage(String userMessage, String userName, ResponseCallback callback) {
+        try {
+            String instructions = "Você é o Orga, assistente de organização. Regras:\n" +
+
+                    (userName != null ?
+                            "1. USE O NOME '" + userName + "' APENAS NESTA RESPOSTA\n" :
+                            "2. NÃO USE NENHUM NOME DE USUÁRIO\n") +
+                    "3. Seja sucinto e direto (1-3 frase)\n" +
+                    "4. Responda sempre com cordialidade\n\n" +
+                    "Pergunta: " + userMessage;
+
+            String jsonBody = String.format("{\"contents\":[{\"parts\":[{\"text\":\"%s\"}]}]}",
+                    instructions.replace("\"", "\\\""));
+
+            RequestBody body = RequestBody.create(jsonBody, MediaType.get("application/json"));
+
+            apiService.getGeminiResponse(body).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        if (response.isSuccessful() && response.body() != null) {
+                            String responseText = parseResponse(response.body().string());
+                            callback.onSuccess(responseText);
+                        } else {
+                            callback.onError("Erro na API: " + response.code());
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Erro ao processar resposta", e);
+                        callback.onError("Erro no processamento");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG, "Falha na conexão", t);
+                    callback.onError("Falha na conexão");
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao criar requisição", e);
+            callback.onError("Erro na requisição");
+        }
+    }
+
+    private String parseResponse(String jsonResponse) throws JSONException {
+        JSONObject json = new JSONObject(jsonResponse);
+        JSONArray candidates = json.getJSONArray("candidates");
+        if (candidates.length() > 0) {
+            return candidates.getJSONObject(0)
+                    .getJSONObject("content")
+                    .getJSONArray("parts")
+                    .getJSONObject(0)
+                    .getString("text");
+        }
+        return "Não entendi. Pode repetir?";
+    }
+
+    public interface ResponseCallback {
+        void onSuccess(String response);
+        void onError(String error);
     }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_tarefas"
+        android:icon="@drawable/ic_task"
+        android:title="Lista de Tarefas"/>
+    <item
+        android:id="@+id/nav_habitos"
+        android:icon="@drawable/ic_habit"
+        android:title="Meus Hábitos"/>
+    <item
+        android:id="@+id/nav_lembretes"
+        android:icon="@drawable/ic_reminder"
+        android:title="Lista de Lembretes"/>
+
+
+</menu>
