@@ -39,5 +39,5 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add"
-        app:backgroundTint="@color/material_dynamic_primary0" />
+        app:backgroundTint="@color/material_dynamic_primary90" />
 </LinearLayout>

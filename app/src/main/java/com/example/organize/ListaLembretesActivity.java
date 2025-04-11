@@ -51,6 +51,6 @@ public class ListaLembretesActivity extends AppCompatActivity {
         super.onResume();
         // Atualiza a lista ao voltar para a tela
         carregarLembretes();
-
+        lembreteAdapter.notifyDataSetChanged();
     }
 }

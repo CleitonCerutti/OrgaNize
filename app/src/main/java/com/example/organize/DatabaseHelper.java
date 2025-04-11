@@ -59,6 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         // Criar tabela Usuário
         String CREATE_TABLE_USUARIO = "CREATE TABLE " + TABLE_USUARIO + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -151,14 +152,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(id)});
         db.close();
         return rowsDeleted > 0;
-    }
-
-    public Cursor getLembretes() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.query(TABLE_LEMBRETES,
-                new String[]{COLUMN_ID, COLUMN_TITULO, COLUMN_DATA, COLUMN_HORARIO, COLUMN_STATUS},
-                null, null, null, null,
-                COLUMN_DATA + " ASC, " + COLUMN_HORARIO + " ASC");
     }
 
     // ==================== MÉTODOS PARA TAREFAS ====================
