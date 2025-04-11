@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -43,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupUserInfo(DatabaseHelper dbHelper) {
         TextView welcomeText = findViewById(R.id.welcome_message);
-        welcomeText.setText("Olá, " + dbHelper.getUserName() + "!");
+        welcomeText.setText(String.format("Olá, %s!", dbHelper.getUserName()));
     }
 
     private void setupCurrentDate() {

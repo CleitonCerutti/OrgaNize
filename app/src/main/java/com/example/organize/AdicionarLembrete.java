@@ -78,7 +78,7 @@ public class AdicionarLembrete extends AppCompatActivity {
             return;
         }
 
-        long result = dbHelper.inserirLembrete(String.valueOf(inputTitle), selectedDate, selectedTime, "true");
+        long result = dbHelper.inserirLembrete(title, selectedDate, selectedTime, "true");
 
         if (result != -1) {
             Toast.makeText(this, "Lembrete salvo!", Toast.LENGTH_SHORT).show();
